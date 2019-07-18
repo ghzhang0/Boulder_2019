@@ -1,7 +1,8 @@
 # Code in file autograd/two_layer_net_autograd.py
-#python nn.py --inputSize 50 100 200 300 --innerHidden 0.0 0.25 0.5 0.6 0.7 0.75 0.8 0.85 0.9 1.0
+#python nn.py --inputSize 50 100 200 300 --hiddenSize 0.0 0.25 0.5 0.6 0.7 0.75 0.8 0.85 0.9 1.0 --epochs 50000
 
 import torch
+import copy
 import argparse
 import numpy as np
 from numpy import genfromtxt
@@ -10,6 +11,7 @@ device = torch.device('cpu')
 # device = torch.device('cuda') # Uncomment this to run on GPU
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--epochs",type=int, required=True)
 parser.add_argument("--inputSize", nargs='*', type=int, required=True)
 parser.add_argument("--hiddenSize", nargs='*', type=float, required=True)
 args = parser.parse_args()
@@ -42,7 +44,7 @@ for index_n1 in range(len(args.inputSize)):
         list_y_pred = []
         list_loss = []
 
-        for t in range(50000):
+        for t in range(args.epochs):
             # Forward pass: compute predicted y using operations on Tensors. Since w1 and
             # w2 have requires_grad=True, operations involving these Tensors will cause
             # PyTorch to build a computational graph, allowing automatic computation of
@@ -55,6 +57,13 @@ for index_n1 in range(len(args.inputSize)):
             # is a Python number giving its value.
             loss = (y_pred - y).pow(2).mean()
             list_loss.append(loss.item())
+
+            if t == args.epochs-1:
+                np.savetxt('weights1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', w1.detach().numpy())
+                np.savetxt('weights2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', w2.detach().numpy())
+                np.savetxt('bias1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', b1.detach().numpy())
+                np.savetxt('bias2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', b2.detach().numpy())
+            
             # Use autograd to compute the backward pass. This call will compute the
             # gradient of loss with respect to all Tensors with requires_grad=True.
             # After this call w1.grad and w2.grad will be Tensors holding the gradient
@@ -76,7 +85,7 @@ for index_n1 in range(len(args.inputSize)):
                 w2.grad.zero_()
                 b1.grad.zero_()
                 b2.grad.zero_()
-        list_y_pred = np.array(list_y_pred)
+        #list_y_pred = np.array(list_y_pred)
         list_loss = np.array(list_loss)
-        np.savetxt('y_pred_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', np.array(list_y_pred[-500:]).flatten().reshape(500*N, N))
+        #np.savetxt('y_pred_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', np.array(list_y_pred[-500:]).flatten().reshape(500*N, N))
         np.savetxt('loss_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', list_loss[-500:])
