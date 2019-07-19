@@ -8,4 +8,5 @@ python nn.py --inputSize 50 100 200 300 --hiddenSize 0.0 0.1 0.25 0.3 0.4 0.5 0.
 To do list:
 - implement dynamic stopping
 - re run simulations with more sizes of hidden layer
+- in analysis_pred: compute the number of activated behaviors
 
