@@ -14,5 +14,6 @@ To do list:
 - re run simulations with more sizes of hidden layer
 - in analysis_pred: compute the number of activated behaviors (threshold: look at the distribition of data: is there a valley between the two peaks (0,1), anyway check that the results are robust upon change of the threshold)
 - try Riccardo's code on one input size + hidden sizes to check for loss
+- think about how to implement point 2) about context dependency
 - correlated input output ?
 
