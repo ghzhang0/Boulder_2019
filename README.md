@@ -4,6 +4,7 @@ Behaviour: In almost all animals there exists a literal information bottleneck (
 
 Data up to 19.07.2019:
 python nn.py --inputSize 50 100 200 300 --hiddenSize 0.0 0.25 0.5 0.6 0.7 0.75 0.8 0.85 0.9 1.0 --epochs 50000
+for three different outputs .dat, _1.dat, _2.dat
 
 New data with dynamic stopping will be:
 python nn.py --inputSize 50 100 200 300 --hiddenSize 0.0 0.1 0.25 0.3 0.4 0.5 0.6 0.7 0.75 0.8 0.85 0.9 1.0
