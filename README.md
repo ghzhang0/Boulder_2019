@@ -9,4 +9,6 @@ To do list:
 - implement dynamic stopping
 - re run simulations with more sizes of hidden layer
 - in analysis_pred: compute the number of activated behaviors
+- try Riccardo's code on one input size + hidden sizes to check for loss
+- correlated input output ?
 
