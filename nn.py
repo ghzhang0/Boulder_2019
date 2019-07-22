@@ -49,7 +49,9 @@ with experiment.train():
 
             list_y_pred = []
             list_loss = []
-
+            # add loss counter
+            k = 0
+            
             for t in range(args.epochs):
                 # Forward pass: compute predicted y using operations on Tensors. Since w1 and
                 # w2 have requires_grad=True, operations involving these Tensors will cause
@@ -91,6 +93,15 @@ with experiment.train():
                     w2.grad.zero_()
                     b1.grad.zero_()
                     b2.grad.zero_()
+
+                # add part for early stopping criteria
+                if k>100:
+                    #print(list_loss[k])
+                    if abs(list_loss[k-100]-list_loss[k])<0.0001:
+                        print('loss saturated at epoch ', k, 'diff in loss', abs(list_loss[k]-list_loss[k-100]))
+                        break
+                k=k+1
+
             #list_y_pred = np.array(list_y_pred)
             list_loss = np.array(list_loss)
             #np.savetxt('y_pred_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', np.array(list_y_pred[-500:]).flatten().reshape(500*N, N))
