@@ -53,6 +53,10 @@ with experiment.train():
             k = 0
             
             for t in range(args.epochs):
+                # Random reshuffle
+                sh = torch.randperm(x.size(0))
+                x = x.index_select(0,sh)
+                y = y.index_select(0,sh)
                 # Forward pass: compute predicted y using operations on Tensors. Since w1 and
                 # w2 have requires_grad=True, operations involving these Tensors will cause
                 # PyTorch to build a computational graph, allowing automatic computation of
