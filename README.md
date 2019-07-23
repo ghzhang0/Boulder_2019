@@ -13,7 +13,7 @@ python nn.py --inputSize 50 100 200 300 --hiddenSize 0.1 0.2 0.3 0.4 0.5 0.6 0.7
 
 To do list:
 - ~~implement dynamic stopping~~ 
-- analyze first batch of new data (N x R)
+- ~~analyze first batch of new data (July 22) (N x R) (Done. But needs to be looked at once we have better convergence with the new code as this batch wasn't really learning very well.)
 - run simulations for different M (N x R x N)
 - ~~in analysis_pred: compute the number of activated behaviors (threshold: look at the distribition of data: is there a valley between the two peaks (0,1), anyway check that the results are robust upon change of the threshold) (conclusion: use 0.5 for threshold)~~
 - ~~try Riccardo's code on one input size + hidden sizes to check for loss ~~
