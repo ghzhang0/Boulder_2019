@@ -100,22 +100,22 @@ with experiment.train():
                     if k>1000:
                         #print(list_loss[k])
                         if abs(list_loss[k-1000]-list_loss[k])<0.0001:
-                            np.savetxt('weights1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', w1.detach().numpy())
-                            np.savetxt('weights2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', w2.detach().numpy())
-                            np.savetxt('bias1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', b1.detach().numpy())
-                            np.savetxt('bias2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', b2.detach().numpy())
+                            np.savetxt('weights1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(args.outputSize[index_n3]) + '.dat', w1.detach().numpy())
+                            np.savetxt('weights2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(args.outputSize[index_n3]) +'.dat', w2.detach().numpy())
+                            np.savetxt('bias1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(args.outputSize[index_n3]) +'.dat', b1.detach().numpy())
+                            np.savetxt('bias2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(args.outputSize[index_n3]) +'.dat', b2.detach().numpy())
                             print('loss saturated at epoch ', k, 'diff in loss', abs(list_loss[k]-list_loss[k-1000]))
                             break
                     k=k+1
 
                     # print results anyway if max epoch is reached
                     if t == args.epochs - 1 
-                        np.savetxt('weights1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', w1.detach().numpy())
-                        np.savetxt('weights2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', w2.detach().numpy())
-                        np.savetxt('bias1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', b1.detach().numpy())
-                        np.savetxt('bias2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', b2.detach().numpy())
+                        np.savetxt('weights1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(args.outputSize[index_n3]) +'.dat', w1.detach().numpy())
+                        np.savetxt('weights2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(args.outputSize[index_n3]) +'.dat', w2.detach().numpy())
+                        np.savetxt('bias1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(args.outputSize[index_n3]) +'.dat', b1.detach().numpy())
+                        np.savetxt('bias2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(args.outputSize[index_n3]) +'.dat', b2.detach().numpy())
 
                 #list_y_pred = np.array(list_y_pred)
                 list_loss = np.array(list_loss)
                 #np.savetxt('y_pred_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', np.array(list_y_pred[-500:]).flatten().reshape(500*N, N))
-                np.savetxt('loss_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '.dat', list_loss[-500:])
+                np.savetxt('loss_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(args.outputSize[index_n3]) +'.dat', list_loss[-500:])
