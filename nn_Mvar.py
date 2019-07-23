@@ -110,7 +110,7 @@ with experiment.train():
                     k=k+1
 
                     # print results anyway if max epoch is reached
-                    if t == args.epochs - 1 
+                    if t == args.epochs - 1:
                         np.savetxt('Data_M_var/weights1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(M_ind) +'.dat', w1.detach().numpy())
                         np.savetxt('Data_M_var/weights2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(M_ind) +'.dat', w2.detach().numpy())
                         np.savetxt('Data_M_var/bias1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(M_ind) +'.dat', b1.detach().numpy())
