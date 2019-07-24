@@ -15,7 +15,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--epochs",type=int, required=True)
 parser.add_argument("--inputSize", nargs='*', type=int, required=True)
 parser.add_argument("--hiddenSize", nargs='*', type=float, required=True)
-parser.add_argument("--outputSize", nargs='*', type=float, required=True)
 args = parser.parse_args()
 
 # Define comet experiment
@@ -98,14 +97,15 @@ with experiment.train():
                         b2.grad.zero_()
 
                     # add part for early stopping criteria
-                    if k>1000:
+	            delta=2000
+                    if k>delta:
                         #print(list_loss[k])
-                        if abs(list_loss[k-1000]-list_loss[k])<0.0001:
+                        if abs(list_loss[k-delta]-list_loss[k])<0.0001:
                             np.savetxt('Data_M_var/weights1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(M_ind) + '.dat', w1.detach().numpy())
                             np.savetxt('Data_M_var/weights2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(M_ind) +'.dat', w2.detach().numpy())
                             np.savetxt('Data_M_var/bias1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(M_ind) +'.dat', b1.detach().numpy())
                             np.savetxt('Data_M_var/bias2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) + '_' + str(M_ind) +'.dat', b2.detach().numpy())
-                            print('loss saturated at epoch ', k, 'diff in loss', abs(list_loss[k]-list_loss[k-1000]))
+                            print('loss saturated at epoch ', k, 'diff in loss', abs(list_loss[k]-list_loss[k-delta]))
                             break
                     k=k+1
 
