@@ -1,5 +1,5 @@
 # Code in file autograd/two_layer_net_autograd.py
-#python nn.py --inputSize 50 100 200 300 --hiddenSize 0.0 0.25 0.5 0.6 0.7 0.75 0.8 0.85 0.9 1.0 --epochs 50000
+#python nn.py --inputSize 50 100 200 --hiddenSize 1.0, 0.9,  0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1 --epochs 50000
 from comet_ml import Experiment
 
 import torch
@@ -20,7 +20,12 @@ args = parser.parse_args()
 # Define comet experiment
 experiment = Experiment("S1gz8UBL6fpAmuPjMIP4zGXMt", project_name="boulder")
 
-learning_rate = 20
+lrs_N50 =    [100, 100,  50,  80,  30,  30,  30,  20,  20,  20]
+lrs_N100 = [1000,1000, 500, 300, 70,  30,  30,  30,  30,  30]
+lrs_N200 = [2500, 1000, 650, 100, 100, 100, 100, 100, 100, 100]
+
+lrs_all = [lrs_N50, lrs_N100, lrs_N200]
+
 # Define nonlinear activation function
 def f(x): # nonlinear conversion function to binary
     return x.sigmoid()
@@ -30,8 +35,9 @@ with experiment.train():
     for index_n1 in range(len(args.inputSize)):
         N = args.inputSize[index_n1] # input dimension and number of training behaviors
         x = torch.tensor(np.genfromtxt("x_{}.csv".format(N), delimiter=','), device=device).float()
-            
+        lrs_N = lrs_all[index_n1]    
         for index_n2 in range(len(args.hiddenSize)):
+            learning_rate = lrs_N[index_n2]
             R = int(N**(args.hiddenSize[index_n2])) # hidden dimension
             R_exp = args.hiddenSize[index_n2]
             dM_exp = np.array([-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4])
