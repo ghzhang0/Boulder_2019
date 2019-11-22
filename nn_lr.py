@@ -20,13 +20,9 @@ args = parser.parse_args()
 # Define comet experiment
 experiment = Experiment("S1gz8UBL6fpAmuPjMIP4zGXMt", project_name="boulder")
 
-
 lrs_N50 =    [30, 15,  15, 15]
 lrs_N100 = [18,  20,  30,  30]
 lrs_N200 = [80, 80, 80, 100]
-#lrs_n50 =    [100, 100,  50,  80,  30,  30,  30,  20,  20,  20]
-#lrs_n100 = [1000,1000, 500, 300, 70,  30,  30,  30,  30,  30]
-#lrs_n200 = [2500, 1000, 650, 100, 100, 100, 100, 100, 100, 100]
 
 lrs_all = [lrs_N50, lrs_N100, lrs_N200]
 
