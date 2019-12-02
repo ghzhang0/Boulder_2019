@@ -6,6 +6,7 @@ import torch
 import copy
 import argparse
 import numpy as np
+import difflib
 from numpy import genfromtxt
 
 device = torch.device('cpu')
@@ -71,6 +72,7 @@ with experiment.train():
                     # don't need to keep references to intermediate values.
                     y_pred = f(f(x.mm(w1).add(b1)).mm(w2).add(b2))
                     y_prednp = y_pred.detach().numpy()
+                    y_np = y.detach().numpy()
                     list_y_pred.append(y_prednp)
                     # Compute and print loss. Loss is a Tensor of shape (), and loss.item()
                     # is a Python number giving its value.
@@ -106,6 +108,17 @@ with experiment.train():
                         np.savetxt('weights2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2])+ '_' + str(args.learningRate[index_n3]) +'.dat', w2.detach().numpy())
                         np.savetxt('bias1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2])+ '_' + str(args.learningRate[index_n3]) +'.dat', b1.detach().numpy())
                         np.savetxt('bias2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2])+ '_' + str(args.learningRate[index_n3]) +'.dat', b2.detach().numpy())
-                np.savetxt(file1, [ args.learningRate[index_n3] , np.sum(np.round(y_prednp))])
+                #Computing number of learnt behaviour
+                per = 0.99
+                threshold = 0.5
+                behaviour = 0
+                y_pred_binary = np.abs(np.round(y_prednp+0.5-threshold))
+                for j in range(len(y_prednp)):
+                    s = difflib.SequenceMatcher(None, y_np[j],y_pred_binary[j])
+                    if s.ratio() > per:
+                        behaviour += 1
+                file1_x = [args.learningRate[index_n3]]
+                file1_y = [behaviour/N]
+                np.savetxt(file1, np.transpose([file1_x, file1_y]), fmt='%.2f')
                 list_loss = np.array(list_loss)
                 np.savetxt('loss_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2])+ '_' + str(args.learningRate[index_n3]) +'.dat', list_loss[-500:])
