@@ -27,7 +27,7 @@ def f(x): # nonlinear conversion function to binary
 K = 0
 # Track performance for comet
 
-file1:=open('lrbehave_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) +'.dat','ab')
+file1=open('lrbehave_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) +'.dat','ab')
 
 with experiment.train():
     for index_n3 in range(len(args.learningRate)):
