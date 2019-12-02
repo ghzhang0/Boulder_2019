@@ -1,5 +1,5 @@
 # code in file autograd/two_layer_net_autograd.py
-#python nn.py --inputSize 50 100 200 --hiddenSize 1.0 0.9 0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 --learningRate 10 15 20 30 50 70 80 100 200 --epochs 100000
+# python nn_lr.py --inputSize 100 --hiddenSize 10 --learningRate 1 5 10 20 30 40 50 60 --epochs 40000
 from comet_ml import Experiment
 
 import torch
@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--epochs",type=int, required=True)
 parser.add_argument("--inputSize", nargs='*', type=int, required=True)
 parser.add_argument("--learningRate", nargs='*', type=int, required=True)
-parser.add_argument("--hiddenSize", nargs='*', type=float, required=True)
+parser.add_argument("--hiddenSize", nargs='*', type=int, required=True)
 args = parser.parse_args()
 
 # Define comet experiment
@@ -27,8 +27,6 @@ def f(x): # nonlinear conversion function to binary
 K = 0
 # Track performance for comet
 
-file1=open('lrbehave_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) +'.dat','ab')
-
 with experiment.train():
     for index_n3 in range(len(args.learningRate)):
         for index_n1 in range(len(args.inputSize)):
@@ -39,6 +37,7 @@ with experiment.train():
             y = torch.tensor(np.genfromtxt("y_{}.csv".format(K), delimiter=','), device=device).float()
 
             for index_n2 in range(len(args.hiddenSize)):
+                file1=open('lrbehave_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2]) +'.dat','ab')
                 #learning_rate = lrs_all[index_n1][index_n2]
                 learning_rate = args.learningRate[index_n3]
                 #R = int(N**(args.hiddenSize[index_n2])) # hidden dimension
@@ -107,7 +106,6 @@ with experiment.train():
                         np.savetxt('weights2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2])+ '_' + str(args.learningRate[index_n3]) +'.dat', w2.detach().numpy())
                         np.savetxt('bias1_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2])+ '_' + str(args.learningRate[index_n3]) +'.dat', b1.detach().numpy())
                         np.savetxt('bias2_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2])+ '_' + str(args.learningRate[index_n3]) +'.dat', b2.detach().numpy())
-
-		np.savetxt(file1, [learningRate[index_n3] , np.sum(np.round(y_prednp))])
+                np.savetxt(file1, [ args.learningRate[index_n3] , np.sum(np.round(y_prednp))])
                 list_loss = np.array(list_loss)
                 np.savetxt('loss_' + str(args.inputSize[index_n1]) + '_' + str(args.hiddenSize[index_n2])+ '_' + str(args.learningRate[index_n3]) +'.dat', list_loss[-500:])
