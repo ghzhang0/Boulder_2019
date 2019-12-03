@@ -1,5 +1,5 @@
 # code in file autograd/two_layer_net_autograd.py
-# python nn_lr.py --inputSize 100 --hiddenSize 10 --learningRate 1 5 10 20 30 40 50 60 --epochs 40000 --trials 10 --activity 0 1
+# python nn_lr.py --inputSize 100 --hiddenSize 10 --learningRate 1 5 10 20 30 40 50 60 --epochs 40000 --trials 10 -activity 0 1
 from comet_ml import Experiment
 
 import torch
@@ -123,7 +123,7 @@ with experiment.train():
                             s = difflib.SequenceMatcher(None, y_np[j],y_pred_binary[j])
                             if s.ratio() > per:
                                 behaviour += 1
-                                behaviours_learnt.append(behaviour/N)
+                        behaviours_learnt.append(behaviour/N)
                     file1_k = [args.activity[index_k]]
                     file1_x = [args.learningRate[index_n3]]
                     file1_y = [np.mean(behaviours_learnt)]
