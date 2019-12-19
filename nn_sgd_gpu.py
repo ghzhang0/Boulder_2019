@@ -1,5 +1,6 @@
 #Code in file autograd/two_layer_net_autograd.py
 #python nn.py --it_ind 0 --inputSize 100 --hiddenSize 100 --learningRate $GHZHANG17_TASK_ID --epochs 100000000
+#grun python nn_sgd.py --it_ind 0 --inputSize 100 --outputSize 100 --hiddenSize 10 --learningRate 5 --epochs 100000
 from comet_ml import Experiment
 
 import torch
@@ -37,7 +38,7 @@ with experiment.train():
     for index_n1 in range(len(args.inputSize)):
         for index_n3 in range(len(args.outputSize)):
             N = args.inputSize[index_n1] # input dimension and number of training behaviors
-            M = N # args.outputSize[index_n3] # output dimension
+            M = args.outputSize[index_n3] # output dimension
             x = torch.tensor(np.genfromtxt("x_{}.csv".format(it_ind), delimiter=','), device='cpu').float()
             y = torch.tensor(np.genfromtxt("y_{}.csv".format(it_ind), delimiter=','), device='cpu').float()
             for index_n2 in range(len(args.hiddenSize)):
@@ -53,9 +54,11 @@ with experiment.train():
 
                 list_behavior = []
                 list_loss = []
-
+                
                 x = x.to(device)
                 y = y.to(device)
+                #y_pred = torch.zeros([M, 1], dtype=torch.float64)
+                #y_pred.to(device)
                 for t in range(args.epochs):
                     # Run the forward pass
                     y_pred = model(x)
@@ -72,7 +75,7 @@ with experiment.train():
 
                     # Update weights using SGD
                     optimizer.step()
-
+                        
                     #Criterion for stopping according to number of learnt behaviours
                     if t % 1000 == 0:
                         behavior = 0
@@ -87,7 +90,8 @@ with experiment.train():
                                 behavior += 1
                         list_behavior.append(behavior)
                         # Log to Comet.ml
-                        experiment.log_metrics({"loss":loss.item(), "behavior":behavior}, step=t)
+                        experiment.log_metrics({"loss":loss.item(), "behavior":behavior})            
+                        #experiment.log_metrics({"loss":loss.item(), "behavior":behavior}, step=t)            
                     if behavior == N:
                         # Extract parameters
                         trained_parameters = []
@@ -104,9 +108,9 @@ with experiment.train():
                         np.savetxt('bias1_' + str(learning_rate) + '_' + str(args.hiddenSize[index_n2])  +'.dat', b1)
                         np.savetxt('bias2_' + str(learning_rate) + '_' + str(args.hiddenSize[index_n2])  +'.dat', b2)
                         break
-
+                
                     # print results when max epoch is reached
-                    if t == args.epochs - 1:
+                    if t == args.epochs - 1: 
                         # Extract parameters
                         trained_parameters = []
                         for param in model.named_parameters():
