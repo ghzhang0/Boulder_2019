@@ -53,11 +53,9 @@ with experiment.train():
 
                 list_behavior = []
                 list_loss = []
-                
+
                 x = x.to(device)
                 y = y.to(device)
-                #y_pred = torch.zeros([M, 1], dtype=torch.float64)
-                #y_pred.to(device)
                 for t in range(args.epochs):
                     # Run the forward pass
                     y_pred = model(x)
@@ -74,7 +72,7 @@ with experiment.train():
 
                     # Update weights using SGD
                     optimizer.step()
-                        
+
                     #Criterion for stopping according to number of learnt behaviours
                     if t % 1000 == 0:
                         behavior = 0
@@ -89,7 +87,7 @@ with experiment.train():
                                 behavior += 1
                         list_behavior.append(behavior)
                         # Log to Comet.ml
-                        experiment.log_metrics({"loss":loss.item(), "behavior":behavior}, step=t)            
+                        experiment.log_metrics({"loss":loss.item(), "behavior":behavior}, step=t)
                     if behavior == N:
                         # Extract parameters
                         trained_parameters = []
@@ -106,9 +104,9 @@ with experiment.train():
                         np.savetxt('bias1_' + str(learning_rate) + '_' + str(args.hiddenSize[index_n2])  +'.dat', b1)
                         np.savetxt('bias2_' + str(learning_rate) + '_' + str(args.hiddenSize[index_n2])  +'.dat', b2)
                         break
-                
+
                     # print results when max epoch is reached
-                    if t == args.epochs - 1: 
+                    if t == args.epochs - 1:
                         # Extract parameters
                         trained_parameters = []
                         for param in model.named_parameters():
