@@ -110,7 +110,7 @@ with experiment.train():
                         # Extract parameters
                         trained_parameters = []
                         for param in model.named_parameters():
-                            trained_parameters.append(param[1].data.numpy())
+                            trained_parameters.append(param[1].to('cpu').data.numpy())
 
                         w1 = trained_parameters[0]
                         b1 = trained_parameters[1]
