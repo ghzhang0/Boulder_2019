@@ -8,8 +8,9 @@ import copy
 from numpy import genfromtxt
 import difflib
 
-device = torch.device('cpu')
-#device = torch.device('cuda') # Uncomment this to run on GPU
+#device = torch.device('cpu')
+device = torch.device('cuda' if torch.cuda.is_available() else "cpu") # Uncomment this to run on GPU
+print(device)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--it_ind",type=int, required=True)
@@ -44,7 +45,7 @@ with experiment.train():
             noise = args.noise
             # Define input
             x_in = [[1 if i==j else 0 for i in range(N)] for j in range(N)]
-            x = torch.tensor(x_in, device = device).float()
+            x = torch.tensor(x_in, device=device).float()
             # Define output
             def generate_out_matrix(dim, nresponding, nclust, nnoise):
                 # dim - dimensions of matrix (assuming it's square for now)
@@ -61,7 +62,7 @@ with experiment.train():
                         out[j,np.random.choice(set2, nnoise, replace=False)]=1
                 return out
             y_np=generate_out_matrix(dim=M, nresponding=k, nclust=5, nnoise=noise)
-            y = torch.tensor(y_np, device = device).float()
+            y = torch.tensor(y_np, device=device).float()
 
             for index_n2 in range(len(args.hiddenSize)):
                 R = int((args.hiddenSize[index_n2])) # hidden dimension
@@ -78,6 +79,7 @@ with experiment.train():
 
                 for t in range(args.epochs):
                     # Run the forward pass
+                    model.to(device)
                     y_pred = model(x)
 
                     # Calculate the loss
@@ -101,7 +103,8 @@ with experiment.train():
                         # Extract parameters
                         trained_parameters = []
                         for param in model.named_parameters():
-                            trained_parameters.append(param[1].data.numpy())
+                            param_cpu = param[1].cpu()
+                            trained_parameters.append(param_cpu.data.numpy())
 
                         w1 = trained_parameters[0]
                         b1 = trained_parameters[1]
@@ -115,9 +118,11 @@ with experiment.train():
                 behavior = 0
                 threshold = 0.5
                 per = 0.99
-                y_pred_binary = np.abs(np.round(y_pred.data.numpy()+0.5-threshold))
+                y_pred_cpu = y_pred.cpu()
+                y_cpu = y.cpu()
+                y_pred_binary = np.abs(np.round(y_pred_cpu.data.numpy()+0.5-threshold))
                 for j in range(len(y)):
-                    s = difflib.SequenceMatcher(None, y.data.numpy()[j],y_pred_binary[j])
+                    s = difflib.SequenceMatcher(None, y_cpu.data.numpy()[j],y_pred_binary[j])
                     if s.ratio() > per:
                         behavior += 1
 
