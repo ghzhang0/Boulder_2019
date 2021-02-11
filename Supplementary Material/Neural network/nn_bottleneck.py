@@ -7,8 +7,7 @@ import copy
 from numpy import genfromtxt
 import difflib
 
-device = torch.device('cuda' if torch.cuda.is_available() else "cpu") # Uncomment this to run on GPU
-print(device)
+device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--it_ind",type=int, required=True)
